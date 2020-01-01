@@ -103,7 +103,7 @@ Existe un Eclipse ya configirado con Spring Boot creado por el equipo de [Spring
 
 ### Actualización: Wizard para seleccionar dependencias en Spring Tools 02:25
 
-: +1: 
+:+1: 
 
 ### Creando Proyecto Backend API REST 10:23
 

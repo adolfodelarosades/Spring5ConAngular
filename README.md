@@ -58,17 +58,33 @@ En esta pestaña tendremos nuestro proyecto Spring Boot.
 
 #### Crear proyecto Spring
 
+Para crear un proyecto Spring podemos seguir los siguientes pasos:
 
+* Seleccionar `File / New / Other...`
+* Seleccionar `Spring Boot` y se nos presentan dos opciones:
+   * `Import Spring Started Content`
+   * `Spring Starter Project`
+* Seleccionamos `Spring Starter Project` y se nos pidiran varios datos
+   * Name
+   * Type
+      * Maven
+      * Gradle
+   * Packaging
+      * Jar (Proyectos Spring que no utlizan parte visual (JSPs))
+      * War (Proyectos Spring con parte visual o que se desplegaran en un servidor externo)
+   * Java Version
+   * Language
+      * Java
+      * Kotlin
+      * Groovy
 
+#### Eclipse configurado por el equipo de Spring
 
-
-
-
-
-
-
+Existe un Eclipse ya configirado con Spring Boot creado por el equipo de [Spring](https://spring.io/), hasta el final de la página tenemos el [link de tools](https://spring.io/tools) donde se nos permite descargar un Eclipse ya configurado con Spring Boot el cual es muy similar al que instalamos a mano.
 
 ### Actualización: Wizard para seleccionar dependencias en Spring Tools 02:25
+
+
 ### Creando Proyecto Backend API REST 10:23
 ### Configurando el Datasource a MySQL en el proyecto backend 06:46
 ### Instalando MySQL 04:12

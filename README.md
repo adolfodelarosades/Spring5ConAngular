@@ -10,9 +10,15 @@ Una de las aplicaciones principales es integrar aplicaciones utilizando REST par
 
 La transferencia y envio de datos se realiza a través de un **ENDPOINT** que es una URL o URI que envía una petición HTTP al servidor con diferentes métodos o verbos del Request, por ejemplo:
 
-Encabezado | Encabezado | Encabezado
------------|------------|------------
-1|2|3
+Verbos | URI                | Action o Handler
+-------|--------------------|------------
+GET    |/clientes           | index()
+GET    |/clientes/create    | create()
+POST   |/clientes           | storre()
+GET    |/clientes/{id}      | show()
+GET    |/clientes/{id}/edit | edit()
+PUT    |/clientes/{id}      | update()
+DELETE |/clientes/{id}      | destroy()
 
 
 ### Descargar Código Fuente 00:03

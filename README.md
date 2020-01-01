@@ -2,6 +2,19 @@
 
 ## 4. Backend: Spring API REST 01:28:02
 
+**REST** REpresentational State Transfer Transferencia de Estado Representacional.
+
+Es un protocolo entre cliente y servidor sin estado (Stateless), en el BackEnd no se maneja ningún tipo de sesiones eso se manejara en el Front End usando el SessionStorage o LocalStorage de HTML5.
+
+Una de las aplicaciones principales es integrar aplicaciones utilizando REST para **obtener datos** desde el BackeEnd en formato JSON a un cliente o **enviar datos** desde cualquier cliente al BackeEnd y realizar operaciones CRUD en la BD.
+
+La transferencia y envio de datos se realiza a través de un **ENDPOINT** que es una URL o URI que envía una petición HTTP al servidor con diferentes métodos o verbos del Request, por ejemplo:
+
+Encabezado | Encabezado | Encabezado
+-----------|------------|------------
+1|2|3
+
+
 ### Descargar Código Fuente 00:03
 
 :+1:
@@ -84,8 +97,11 @@ Existe un Eclipse ya configirado con Spring Boot creado por el equipo de [Spring
 
 ### Actualización: Wizard para seleccionar dependencias en Spring Tools 02:25
 
+: +1: 
 
 ### Creando Proyecto Backend API REST 10:23
+
+
 ### Configurando el Datasource a MySQL en el proyecto backend 06:46
 ### Instalando MySQL 04:12
 ### Creando la Base de Datos 03:11

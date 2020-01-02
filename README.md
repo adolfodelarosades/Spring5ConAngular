@@ -83,11 +83,11 @@ Para crear un proyecto Spring podemos seguir los siguientes pasos:
 * Seleccionar `Spring Boot` y se nos presentan dos opciones:
    * `Import Spring Started Content`
    * `Spring Starter Project`
-* Seleccionamos `Spring Starter Project` y se nos pidiran varios datos
+* Seleccionamos `Spring Starter Project` y se nos pediran varios datos
    * Name
    * Type
-      * Maven
-      * Gradle
+      * Maven (Usa una estructura XML)
+      * Gradle (Usa una estructura DSL (domain-specific language) o lenguaje de dominio específico)
    * Packaging
       * Jar (Proyectos Spring que no utlizan parte visual (JSPs))
       * War (Proyectos Spring con parte visual o que se desplegaran en un servidor externo)
@@ -107,9 +107,64 @@ Existe un Eclipse ya configirado con Spring Boot creado por el equipo de [Spring
 
 ### Creando Proyecto Backend API REST 10:23
 
+Para crear un proyecto nuevo seguir los siguientes pasos:
+
+* Seleccionar `File / New / Other...`
+* Seleccionar `Spring Boot` y se nos presentan dos opciones:
+   * `Import Spring Started Content`
+   * `Spring Starter Project`
+* Seleccionamos `Spring Starter Project` y se nos pediran varios datos
+   * Name: **spring-boot-backend-apirest**
+   * Type: **Maven**
+   * Packaging: **Jar**
+   * Java Version: **8**
+   * Language: **Java**
+   * Group: **com.bolsadeideas.springboot.backend.apirest**
+   * Package: **com.bolsadeideas.springboot.backend.apirest**
+* Presionamos el botón **Next**, para ir a la ventana de Dependencias o Librerías **New Spring Starter Project Dependencies**
+   * Spring Boot Version: **2.2.2** ( La versión más estable hasta el momento**
+   * Seleccionar **Web** 
+      * Marcar **Spring Web** (Contiene el API, las anotaciones y controladores para crear nuestro REST
+   * Seleccionar **SQL**
+      * Marcar la dependencia **Spring Data JPA**
+      * Marcar la dependencia **MySQL Driver**
+   * Seleccionar **Developer Tools**
+      * Marcar **Spring Boot DevTools** (Para actualizar automáticamente el deploy cuando se realicen cambios)
+* Dar click en **Finish**
+
+Una vez hecho esto se genera la estructura de nuestro proyecto, algunos archivos importantes son:
+   
+   * **pom.xml**: Contiene la estructura de nuestro proyecto. (Con la información que se metio al crear el proyecto)
+   * **application.properties**: Archivo principal de configuración. Permite sobreescribir cualquier configuración del proyecto. (Actualmente vacío)
+   * **SpringBootBackendApirestApplication**: Clase principal, es el **Boot Start** el arranque, una clase que se crea de forma automática en el package base de nuestro proyecto. Contiene lo siguiente:
+      * **@SpringBootApplication**: anotación más importante de la aplicación 
+   
+#### Ejecutar nuestro proyecto
+
+* Colocarnos en la raiz del proyecto
+* Pulsar click derecho
+* Seleccionar `Run As / Spring Boot App`
+
+Nos marcara algún error por que aún falta configurar el proyecto.
 
 ### Configurando el Datasource a MySQL en el proyecto backend 06:46
+
+Ir a **application.properties** e insertar el siguiente codigo:
+ 
+ ```
+ spring.datasource.url=jdbc:mysql://localhost/db_springboot_backend?usesSSL=false
+spring.datasource.username=root
+spring.datasource.password=
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+spring.jpa.database-platform=org.hibernate.dialect.MySQL57Dialect
+spring.jpa.hibernate.ddl-auto=create-drop
+logging.level.org.hibernate.SQL=debug
+ ```
+
 ### Instalando MySQL 04:12
+
+Ir a [MySQL](https://www.mysql.com/), vamos a [MySQL Community (GPL) Downloads](https://dev.mysql.com/downloads/) Seleccionamos MySQL Community Server 8.0.18 y descargamos la versión completa para nuestro Sistema Operativo. Ejecutarlo para instalar.
+
 ### Creando la Base de Datos 03:11
 ### Añadiendo la clase Entity Cliente al Backend 08:20
 ### Añadiendo las clases Repository y Service de la lógica de negocio 11:48

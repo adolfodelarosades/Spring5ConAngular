@@ -163,10 +163,195 @@ logging.level.org.hibernate.SQL=debug
 
 ### Instalando MySQL 04:12
 
-Ir a [MySQL](https://www.mysql.com/), vamos a [MySQL Community (GPL) Downloads](https://dev.mysql.com/downloads/) Seleccionamos MySQL Community Server 8.0.18 y descargamos la versión completa para nuestro Sistema Operativo. Ejecutarlo para instalar.
+Ir a [MySQL](https://www.mysql.com/), vamos a [MySQL Community (GPL) Downloads](https://dev.mysql.com/downloads/) Seleccionamos MySQL Community Server 8.0.18 y descargamos la versión completa para nuestro Sistema Operativo. 
+Ejecutarlo para instalar:
+* MySQL Server
+* Workbeanch
 
 ### Creando la Base de Datos 03:11
+
+Vamos a crear la BD `db_springboot_backend` con comandos seria así:
+
+```
+> mysql -u root -p
+Enter password:
+...
+MySQL [(none)]> CREATE DATABASE db_springboot_backend;
+
+MySQL [(none)]> show databases;
+```
+
+#### Probar la conexión
+
+Una vez creada la BD podemos crear la conexión ejecutando la aplicación. `Run As / Spring Boot Ass`. 
+Se levanta el servidor sin errores y en la **consola** podemos ver el dialecto que esta utilizando **Using dialect: org.hibernate.dialect.MySQL57Dialect** es el que configuramos.
+
+#### Abrir la BD en Workbeanch
+
+Podemos abrir la BD creada en Workbeanch, actualmente no tendra tablas pero ya las crearemos.
+
 ### Añadiendo la clase Entity Cliente al Backend 08:20
+
+Vamos a crear la clase **Entity Cliente**, la idea es que esta clase este mapeada a la tabla Clientes y represente la persistencia o datos de los clientes por el lado del servidor. Vamos a seguir los siguientes pasos:
+
+* Crear dentro del package principal el package **models.entity**.
+* Dentro del nuevo package creamos la clase **Cliente**
+* Declaramos las propiedades de la clase:
+```java
+public class Cliente {
+	
+	private Long id;
+	private String nombre;
+	private String apellido;
+	private String email;
+	private Date createAt;
+
+}
+```
+* Añadimos los `Getters` y `Setters` de todas las propiedades:
+```java
+public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getApellido() {
+		return apellido;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Date getCreateAt() {
+		return createAt;
+	}
+
+	public void setCreateAt(Date createAt) {
+		this.createAt = createAt;
+	}
+
+```
+* El siguiente paso es convertir esta clase en una clase **Entity**, en una clase de persistencia que esta mapeada a una tabla de una BD, cada atributo de la clase corresponde a un campo en la tabla, los pasos son:
+   * Implementar la **interface Serializable**:    `public class Cliente implements Serializable {`
+   * Crear el **default serial version ID** pulsando el foco amarillo que sale: `private static final long serialVersionUID = 1L;` es un atributo estatico que es requerido cuando se implementa el serializable.
+   * Marcar la clase para indicar que se trata de una clase Entity con: `@Entity` importarla de `javax.persistence`
+   * La siguiente anotación no seria necesaria si la Tabla y la Clase se llaman igual pero en este caso no sera así (por que la tabla se llama **clientes**: `@Table(name="clientes")`
+   * La siguiente anotación nos va a permitir indicar que nuestra propiedad id corresponde a la clave primaria: `@Id`
+   * También debemos indicar como se genera o cual es la estrategia de generación de esta llave en la BD: `@GeneratedValue(strategy=GenerationType.IDENTITY)` para MySQL es IDENTITY, para Oracle es SeQUENCE.
+   * Para las propiedades **nombre**, **apellido** e **email** van a representar columnas por lo que se podrían anotar con `@Column` sin embargo, cuando el nombre del campo y la propidad son iguales se puede omitir. Se utilizaría si los nombres no son iguales, o para indicar la longitud, para indicar si acepta nulos, etc. Para estas propiedades no lo usaremos.
+   * Para la propiedad **createAt** si usaremos la anotación `@Column()` como sigue: `@Column(name="create_at")`
+   * También le aplicaremos la antoación `@Temporal()` para indicar cual va a ser la transformación o tipo equivalente en la BD: `@Temporal(TemporalType.DATE)` transforma la fecha de Java a la de SQL. 
+   
+Eso es todo, ya tenemos nuestra clase Entity, que esta mapeada parte del contexto de persistencia de JPA, por lo tanto esta sincronizada con la BD:
+
+```java
+package com.bolsadeideas.springboot.backend.apirest.models.entity;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+@Entity
+@Table(name="clientes")
+public class Cliente implements Serializable {
+
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
+	
+	private String nombre;
+	private String apellido;
+	private String email;
+	
+	@Column(name="create_at")
+	@Temporal(TemporalType.DATE)
+	private Date createAt;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getApellido() {
+		return apellido;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Date getCreateAt() {
+		return createAt;
+	}
+
+	public void setCreateAt(Date createAt) {
+		this.createAt = createAt;
+	}
+	
+	private static final long serialVersionUID = 1L;
+
+}
+```
+
+Vamos a ejecutar el proyecto para ver como se genera la tabla.
+Si vemos el log nos indica:
+
+```
+2020-01-02 18:52:40.014 DEBUG 21596 --- [  restartedMain] org.hibernate.SQL                        : drop table if exists clientes
+2020-01-02 18:52:40.028 DEBUG 21596 --- [  restartedMain] org.hibernate.SQL                        : create table clientes (id bigint not null auto_increment, apellido varchar(255), create_at date, email varchar(255), nombre varchar(255), primary key (id)) engine=InnoDB
+```
+Esta boorando la tabla si existe y luego la crea con todas las caracteristicas en los campos que se definieron en la clase.
+
+Podemos abrir el Workbeanch y ver nuestra tabla desde allí.
+
 ### Añadiendo las clases Repository y Service de la lógica de negocio 11:48
 ### Creando controlador @RestController y EndPoint para listar 04:22
 ### Añadiendo Datos de pueba 02:54

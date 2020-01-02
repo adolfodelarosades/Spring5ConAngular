@@ -152,10 +152,10 @@ Nos marcara algún error por que aún falta configurar el proyecto.
 Ir a **application.properties** e insertar el siguiente codigo:
  
  ```
- spring.datasource.url=jdbc:mysql://localhost/db_springboot_backend?usesSSL=false
+spring.datasource.url=jdbc:mysql://localhost/db_springboot_backend?usesSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
 spring.datasource.username=root
 spring.datasource.password=
-spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 spring.jpa.database-platform=org.hibernate.dialect.MySQL57Dialect
 spring.jpa.hibernate.ddl-auto=create-drop
 logging.level.org.hibernate.SQL=debug

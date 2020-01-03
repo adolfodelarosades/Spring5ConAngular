@@ -364,7 +364,9 @@ Hay diferentes formas de implementar un DAO, podemos crear una clase, podemos tr
 
 Simplemente se implementa una interfaz, heredamos de la interfaz CRUD repositor y prácticamente estamos listos ya trae todos los métodos básicos para un CRUD, para poder listar, para buscar, para modificar, para guardar y para eliminar.
 
-Y además si queremos podemos implementar nuestros propios métodos customizados usando la notación @query o también utilizando el nombre el método cosa que vamos a ver un poco en esta clase.
+Y además si queremos podemos implementar nuestros propios métodos customizados usando la notación @Query o también utilizando el nombre el método cosa que vamos a ver un poco en esta clase.
+
+#### Crear la clase Repository o DAO
 
 Pero vamos a implementar primero la interfaz DAO:
 
@@ -401,73 +403,60 @@ Tenemos el método **findAll** para buscar todas. Retorna un Iterable.
 Tenemos el método **deleteById** para eliminar por ID.
 Tenemos el método **delete** para borrar por un objeto Entity.
 
-Y varios métodos y propiedades más. Podriamos revisar la documentación para ver más detalles.
+Y varios métodos y propiedades más.
 
+**Ya podemos contar con los métodos que estamos heredando, ya los podemos usar practicamente sin hacer nada, solo por haber utilizado `CrudRepository`.**
 
+#### Spring Data JPA
 
-Find all retorna un terabyte.
+ Podriamos revisar la documentación de [Spring Data JPA](https://spring.io/projects/spring-data-jpa) y ver su [Documentación](https://docs.spring.io/spring-data/jpa/docs/2.2.3.RELEASE/reference/html/#reference) para ver más detalles.
 
-La interfaz de colección Effy.
+Tenemos `4.1. Core concepts` concepto del core una interfaz Repository tal como la vimos y esta interesante porque va a realizar las consultas y operaciones de acuerdo al nombre el método.
 
-Hay un montón de cosas con eliminar por Heydi eliminar por un objeto entidad y varios métodos más.
+Si tenemos el nombre **save** va a realizar un **persist en JPA**. Por lo tanto hace un **insert a la BD**, si hacemos un **findById** va a realizar una consulta **select a la clase entity**, en nuestro caso cliente **where al atributo id** que sea igual al parámetro entonces de acuerdo al nombre del método va a realizar la consulta incluso en `4.2. Query methods` en la documentación tenemos [más detalles](https://docs.spring.io/spring-data/jpa/docs/2.2.3.RELEASE/reference/html/#repositories.query-methods.details) para hacer nuestra consulta.
 
-Es una interfaz bien interesante que nos propone esprinta atajos tapear.
+```java
+interface PersonRepository extends Repository<Person, Long> {
 
-Incluso podríamos revisar la documentación la página Project esprín esprinta JPA nos vamos acá a referencia.
+  List<Person> findByEmailAddressAndLastname(EmailAddress emailAddress, String lastname);
 
-Documentación y acá tenemos concepto del core una interfaz repositor tal como la vimos y esta interesante
+  // Enables the distinct flag for the query
+  List<Person> findDistinctPeopleByLastnameOrFirstname(String lastname, String firstname);
+  List<Person> findPeopleDistinctByLastnameOrFirstname(String lastname, String firstname);
 
-porque va a realizar las consultas y operaciones de acuerdo al nombre el método.
+  // Enabling ignoring case for an individual property
+  List<Person> findByLastnameIgnoreCase(String lastname);
+  // Enabling ignoring case for all suitable properties
+  List<Person> findByLastnameAndFirstnameAllIgnoreCase(String lastname, String firstname);
 
-Si tenemos el nombre se va a realizar un persiste en JPA.
+  // Enabling static ORDER BY for a query
+  List<Person> findByLastnameOrderByFirstnameAsc(String lastname);
+  List<Person> findByLastnameOrderByFirstnameDesc(String lastname);
+}
+```
+Podemos realizar consulta en la interfaz, implementar métodos personalizados por ejemplo en `List<Person> findByEmailAddressAndLastname(EmailAddress emailAddress, String lastname);`:
 
-Por lo tanto hacer un insert a la Hayato si hacemos un fi por ahí va a realizar una consulta Selleck
+* **find** para hacer un **select**
+* **By** para el **where**
+* **And** para poner condiciones **where ...and..**
+* **EmailAddress** igual al primer parámetro **emailAddress**
+* **Lastname** igual al segundo parámetro **lastname**
 
-a la clase entity.
+En `List<Person> findPeopleDistinctByLastnameOrFirstname(String lastname, String firstname);` tenemos para el **distinct**, tenemos otros operadores por ejemplo:
 
-En nuestro caso cliente Wer el atributo Didí sea igual al parámetro entonces de acuerdo al nombre el
+`Between, LessThan, GreaterThan, Like`
 
-método va a realizar la consulta incluso más arriba en la documentación.
+Otra alternativa aparte de realizar consulta a través del nombre del método es utilizar una [anotación @Query](5.3.4. Using @Query). Podemos tener un método con algún nombre que le queremos dar y lo anotamos con `@Query` y entre los parentesis colocamos la consulta de JPA o Hibernate. Recordemos que estas consultas son **HQL** es decir de **Hibernate Query Language** orientada a objetos, no a tablas.  También pueden recibir parámetros, veamos el ejemplo:
 
-Por acá tenemos definiendo mi método definiendo un método entonces a través del nombre Método haca podemos
+```
+public interface UserRepository extends JpaRepository<User, Long> {
 
-realizar consulta en la interfaz podemos implementar métodos personalizados por ejemplo con fines para
+  @Query("select u from User u where u.emailAddress = ?1")
+  User findByEmailAddress(String emailAddress);
+}
+```
 
-hacer un Selic Boy es para Wer y Haunt es para el Wer aunt entonces sería Selleck la clase Entity Wer
-
-y mail address igual a este parámetro an las es igual a este parámetro y así también tenemos para el
-
-distinctive.
-
-En fin acá podemos buscar y realiza consulta de acuerdo al nombre del método y también tenemos por ejemplo
-
-operadores tales como el Bitcoin por ejemplo esto operadores se pueden utilizar en el nombre del método
-
-les dan menor que Gray dan mayor que Lykke un Wer Lykke.
-
-Otra alternativa aparte de realizar consulta a través del nombre Método podemos utilizar una anotación
-
-la notación QWERTY si nos vamos a JPA repositorios usando query la notación QWERTY.
-
-También podemos tener un método con algún nombre que le queremos dar y lo notábamos con qwerty y acá
-
-colocamos la consulta de JPA o Bernet.
-
-Recordemos que esas consultas son H cueles es decir de Internet Query Language orientada a objetos no
-
-son de tablas y acá pasamos un parámetro un nombre parámetro con el signo pregunta y el índice que sería
-
-el primer parámetro.
-
-Y acá lo pasamos por argumento Tuset internamente va a pasar el valor del email address.
-
-De este argumento al Quay bien.
-
-Entonces volviendo al cliente dado que contamos con los métodos que lo estamos heredando los métodos
-
-para el club por lo tanto tenemos implementado nuestro dado prácticamente de forma automática utilizando
-
-Grub repositorio.
+#### Crear la clase Service
 
 El siguiente paso es crear la clase servis entonces vamos a crear un nuevo package Models punto servicios.
 

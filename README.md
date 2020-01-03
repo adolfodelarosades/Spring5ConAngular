@@ -350,9 +350,235 @@ Si vemos el log nos indica:
 ```
 Esta boorando la tabla si existe y luego la crea con todas las caracteristicas en los campos que se definieron en la clase.
 
-Podemos abrir el Workbeanch y ver nuestra tabla desde allí.
+Podemos abrir el Workbeanch y ver nuestra tabla desde allí. Cabe aclarar que el orden de los campos es alfabetico a excepción del id por ser clave primaria.
+
+`id   apellido   create_at   email   nombre`
 
 ### Añadiendo las clases Repository y Service de la lógica de negocio 11:48
+
+Vamos a comenzar creando la clase de acceso a datos DAO o Repository la cual tiene como función acceder a los datos para realizar consultas y todo tipo de operaciones en la BD. 
+
+Después crearemos la clase Service que en el fondo puede contener a las clases DAO que interactuan todas bajo una misma transacción, el objetivo principal del Service es evitar ensuciar el Controlador con las clases DAO, simplemente se desacopla y se lleva a una fachada.
+
+Hay diferentes formas de implementar un DAO, podemos crear una clase, 
+
+Podemos trabajar directamente con el Entity manager con JPA implementar todo de forma manual pero es
+
+Brink tiene un componente bastante potente robusto que se llama esprín data JPA y esto nos ahorra un
+
+montón de trabajo de tener que estar implementando todos métodos y consultas de internet de JPA de forma
+
+manual.
+
+Simplemente se implementa una interfaz heredamos de la interfaz repositor y prácticamente estamos listos
+
+ya que todos los métodos básicos para un club para un club para poder listar para buscar por ahí para
+
+modificar para guardar y para eliminar.
+
+Y además si queremos podemos implementar nuestros propios métodos customizados usando la notación qwerty
+
+o también utilizando el nombre el método cosa que vamos a ver un poco en esta clase.
+
+Pero vamos a implementar primero la interfaz dado entonces con un clic derecho en el package modo dado
+
+y nos vamos a interfaz y le damos el nombre y Killen te damos finalizar simplemente una interfaz que
+
+no tiene implementación y acá vamos a extender de Cruz repositorio acá propone un generic tipo genérico
+
+acá tenemos el nombre de la clase Entity que está asociado a este dado a este repositorio sería el cliente
+
+la importamos justamente la clase que creamos el video anterior sería el tipo de dato de la llave Heydi
+
+loncco y hoy tenemos implementado nuestro Dawa de acceso a datos y acá mismo te hacemos por ejemplo
+
+con control click nos vamos al detalle a los métodos de esta interfaz de interfaz para generar operaciones
+
+Grout genéricas de un repositorio de una clase de acceso datos.
+
+Acá tenemos el método sait que recibe un genérico de una entidad.
+
+Acá tenemos guardar varias entidades buscar por Heydi retorna un optional un optional una clase un tipo
+
+de dato que nos permite manejar mejor el resultado.
+
+Por ejemplo si se realizó bien la consulta va a retornar el objeto con ket.
+
+Si no podemos manejar el error con manejo decepción o bien retornar Null.
+
+En fin hay distintas alternativas.
+
+Luego tenemos si existe Prandi para comprobar buscar todas.
+
+Find all retorna un terabyte.
+
+La interfaz de colección Effy.
+
+Hay un montón de cosas con eliminar por Heydi eliminar por un objeto entidad y varios métodos más.
+
+Es una interfaz bien interesante que nos propone esprinta atajos tapear.
+
+Incluso podríamos revisar la documentación la página Project esprín esprinta JPA nos vamos acá a referencia.
+
+Documentación y acá tenemos concepto del core una interfaz repositor tal como la vimos y esta interesante
+
+porque va a realizar las consultas y operaciones de acuerdo al nombre el método.
+
+Si tenemos el nombre se va a realizar un persiste en JPA.
+
+Por lo tanto hacer un insert a la Hayato si hacemos un fi por ahí va a realizar una consulta Selleck
+
+a la clase entity.
+
+En nuestro caso cliente Wer el atributo Didí sea igual al parámetro entonces de acuerdo al nombre el
+
+método va a realizar la consulta incluso más arriba en la documentación.
+
+Por acá tenemos definiendo mi método definiendo un método entonces a través del nombre Método haca podemos
+
+realizar consulta en la interfaz podemos implementar métodos personalizados por ejemplo con fines para
+
+hacer un Selic Boy es para Wer y Haunt es para el Wer aunt entonces sería Selleck la clase Entity Wer
+
+y mail address igual a este parámetro an las es igual a este parámetro y así también tenemos para el
+
+distinctive.
+
+En fin acá podemos buscar y realiza consulta de acuerdo al nombre del método y también tenemos por ejemplo
+
+operadores tales como el Bitcoin por ejemplo esto operadores se pueden utilizar en el nombre del método
+
+les dan menor que Gray dan mayor que Lykke un Wer Lykke.
+
+Otra alternativa aparte de realizar consulta a través del nombre Método podemos utilizar una anotación
+
+la notación QWERTY si nos vamos a JPA repositorios usando query la notación QWERTY.
+
+También podemos tener un método con algún nombre que le queremos dar y lo notábamos con qwerty y acá
+
+colocamos la consulta de JPA o Bernet.
+
+Recordemos que esas consultas son H cueles es decir de Internet Query Language orientada a objetos no
+
+son de tablas y acá pasamos un parámetro un nombre parámetro con el signo pregunta y el índice que sería
+
+el primer parámetro.
+
+Y acá lo pasamos por argumento Tuset internamente va a pasar el valor del email address.
+
+De este argumento al Quay bien.
+
+Entonces volviendo al cliente dado que contamos con los métodos que lo estamos heredando los métodos
+
+para el club por lo tanto tenemos implementado nuestro dado prácticamente de forma automática utilizando
+
+Grub repositorio.
+
+El siguiente paso es crear la clase servis entonces vamos a crear un nuevo package Models punto servicios.
+
+Vamos a finalizar y en servicios vamos a crear una interfaz y cliente Service y esta interfaz le vamos
+
+a dar un contrato de implementación.
+
+Los métodos del club por ejemplo para alistar para buscar por ahí guardar editar y eliminar Vamos primero
+
+con el fin al
+
+cliente.
+
+Hoy importamos Liseth de Java útil importamos cliente y por ahora vamos a dejar solamente implementado
+
+el final y después vamos a ir implementando lo demás métodos del servis para realizar.
+
+Entonces ahora vamos a crear la clase servis y vamos a implementar este método.
+
+Vamos a crear entonces la clase servis
+
+cliente servis implement de implementación.
+
+Le ponemos imploro finaliza entonces implement
+
+y cliente servis hakama un error que nos pide implementar el método final.
+
+Entonces acá tenemos que inyectar usando atu Wired inyección de dependencia en sprint la vamos a importar.
+
+Vamos a inyectar el cliente dado entonces es un Privat
+
+importamos el cliente Davo y le llevamos al atributo cliente el agua.
+
+Entonces en el método final acabamos a ocupar a utilizar este atributo para acceder a los clientes a
+
+la lista de clientes.
+
+Entonces cliente dado fin Holl.
+
+Este método retorna un terabyte por lo tanto acá tenemos que convertir a un listo.
+
+Hacemos un cast de List de cliente y ya está terminado implementado el método.
+
+Luego tenemos que anotar con transaccional
+
+esta notación nos permite manejar transacción en el método transaccional de transacción anotación y
+
+como es una consulta su Select sería solamente de lectura.
+
+Acá colocamos Read Only igual bien ahora de todas formas los métodos del crudo repositorios ya vienen
+
+con transaccionalidad ya son transaccionales.
+
+Por lo tanto podríamos omitir esta notación.
+
+Ahora yo prefiero anotarla en el servis ya que describe la transaccionalidad de la clase repositor y
+
+más que nada para tener el control y hacerlo de una forma más explícita.
+
+Pero de todas formas se puede omitir así que daría exactamente igual ahora lo que si todos los métodos
+
+nuevos que queramos implementar en el cliente dado ya sea a través del nombre Método o utilizando la
+
+notación QWERTY ahí tendríamos que utilizar el Transactions solamente para los métodos propios pero
+
+los que ya vienen dentro como el SAI como el fin por ahí fenol etcétera.
+
+Estos métodos ya vienen con transaccion.
+
+También quería destacar el autor Wired una notación para inyectar el quién te daba el cliente dado.
+
+A pesar de que es una interfaz pero por detrás de escena exprima crear una instancia de una implementación
+
+concreta utilizando la interfaz iba a quedar guardada en el contenedor de sprint en el contexto.
+
+Por lo tanto la podemos inyectar en el otro componente ya sea una clase servis ya sea en un controlador
+
+en cualquier clase de nuestra aplicación.
+
+Qué más queda para finalizar faltaría anotar con servis
+
+una actuación muy importante ya que con esto decoramos y marcamos esta clase como un componente de servicio
+
+en sprint y también se va a guardar en el contenedor de sprint que va a quedar almacenado en el contexto.
+
+Y después podemos inyectar este objeto.
+
+Este Vins de sprint en el controlador y lo podemos utilizar pero para eso tenemos que decorarlo y servis
+
+lo que hace es justamente es un tipo un estereotipo de component.
+
+Por lo tanto con componentes marca la clase la decora para que sea un componente del frente un Vins
+
+y se registra en el contenedor vamos a guardar y ya tenemos implementar nuestra clase serves bien y
+
+estamos listo con nuestra lógica negocio con toda la clase del modelo y la próxima clase continuamos
+
+con el controlador resto quedamos hasta acá y cualquier duda que tengan las revisamos hasta la próxima.
+
+Spring cuenta con un componente bastante robusto llamado **Spring Data JPA** 
+Pasos para crear el Repository o DAO:
+
+* Crear el package **models.dao** dentro del package principal.
+
+
+
 ### Creando controlador @RestController y EndPoint para listar 04:22
 ### Añadiendo Datos de pueba 02:54
 ### Usando Postman para probar nuestras APIs 04:09

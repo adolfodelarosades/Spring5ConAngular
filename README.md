@@ -360,55 +360,50 @@ Vamos a comenzar creando la clase de acceso a datos DAO o Repository la cual tie
 
 Después crearemos la clase Service que en el fondo puede contener a las clases DAO que interactuan todas bajo una misma transacción, el objetivo principal del Service es evitar ensuciar el Controlador con las clases DAO, simplemente se desacopla y se lleva a una fachada.
 
-Hay diferentes formas de implementar un DAO, podemos crear una clase, 
+Hay diferentes formas de implementar un DAO, podemos crear una clase, podemos trabajar directamente con el Entity manager con JPA implementar todo de forma manual pero Spring tiene un componente bastante potente, robusto que se llama **Spring Data JPA** y esto nos ahorra un montón de trabajo de tener que estar implementando todos métodos y consultas de JPA de forma manual.
 
-Podemos trabajar directamente con el Entity manager con JPA implementar todo de forma manual pero es
+Simplemente se implementa una interfaz, heredamos de la interfaz CRUD repositor y prácticamente estamos listos ya trae todos los métodos básicos para un CRUD, para poder listar, para buscar, para modificar, para guardar y para eliminar.
 
-Brink tiene un componente bastante potente robusto que se llama esprín data JPA y esto nos ahorra un
+Y además si queremos podemos implementar nuestros propios métodos customizados usando la notación @query o también utilizando el nombre el método cosa que vamos a ver un poco en esta clase.
 
-montón de trabajo de tener que estar implementando todos métodos y consultas de internet de JPA de forma
+Pero vamos a implementar primero la interfaz DAO:
 
-manual.
+* Clic derecho en el package models.dao y damos `New / Interface`
+* Name: **IClienteDao**
 
-Simplemente se implementa una interfaz heredamos de la interfaz repositor y prácticamente estamos listos
+Crea el archivo:
 
-ya que todos los métodos básicos para un club para un club para poder listar para buscar por ahí para
+```java
+package com.bolsadeideas.springboot.backend.apirest.models.dao;
 
-modificar para guardar y para eliminar.
+public interface IClienteDao {
 
-Y además si queremos podemos implementar nuestros propios métodos customizados usando la notación qwerty
+}
+```
+* Vamos a extender de **CrudRepository**:
+```java
+public interface IClienteDao extends CrudRepository<T, ID>{
 
-o también utilizando el nombre el método cosa que vamos a ver un poco en esta clase.
+}
+```
+* Propone un tipo generico en `T` debemos poner la clase Entity que esta asociada a este DAO o Repository, en este caso la clase **Cliente** que creamos previamente y en `ID` tenemos que poner el tipo de dato de la llave `id`:
+```java
+public interface IClienteDao extends CrudRepository<Cliente, Long>{
+```
 
-Pero vamos a implementar primero la interfaz dado entonces con un clic derecho en el package modo dado
+Si damos un `Ctrl + Click` sobre `CruRepository` nos vanos a los métodos de esta interfaz `Interface for generic CRUD operations on a repository for a specific type.`.
 
-y nos vamos a interfaz y le damos el nombre y Killen te damos finalizar simplemente una interfaz que
+Tenemos el método **save**  que recibe un genérico de una entidad.
+Tenemos el método **saveAll** para guardar varias entidades.
+Tenemos el método **findById** para buscar por ID, retorna un Optional. Un Optional es una clase, un tipo de dato que nos permite manejar mejor el resultado. Por ejemplo si se realizó bien la consulta va a retornar el objeto con get. Si no podemos manejar el error con manejo de excepción o bien retornar Null.
+Tenemos el método **existsById** para comprobar si existe.
+Tenemos el método **findAll** para buscar todas. Retorna un Iterable.
+Tenemos el método **deleteById** para eliminar por ID.
+Tenemos el método **delete** para borrar por un objeto Entity.
 
-no tiene implementación y acá vamos a extender de Cruz repositorio acá propone un generic tipo genérico
+Y varios métodos y propiedades más. Podriamos revisar la documentación para ver más detalles.
 
-acá tenemos el nombre de la clase Entity que está asociado a este dado a este repositorio sería el cliente
 
-la importamos justamente la clase que creamos el video anterior sería el tipo de dato de la llave Heydi
-
-loncco y hoy tenemos implementado nuestro Dawa de acceso a datos y acá mismo te hacemos por ejemplo
-
-con control click nos vamos al detalle a los métodos de esta interfaz de interfaz para generar operaciones
-
-Grout genéricas de un repositorio de una clase de acceso datos.
-
-Acá tenemos el método sait que recibe un genérico de una entidad.
-
-Acá tenemos guardar varias entidades buscar por Heydi retorna un optional un optional una clase un tipo
-
-de dato que nos permite manejar mejor el resultado.
-
-Por ejemplo si se realizó bien la consulta va a retornar el objeto con ket.
-
-Si no podemos manejar el error con manejo decepción o bien retornar Null.
-
-En fin hay distintas alternativas.
-
-Luego tenemos si existe Prandi para comprobar buscar todas.
 
 Find all retorna un terabyte.
 

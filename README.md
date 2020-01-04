@@ -777,5 +777,37 @@ Para eso lo primero que vamos a tener que hacer es añadir el Cors significa o s
 
 ### Uso de Cors para compartir recursos en API REST 04:02
 
+[CORS](https://developer.mozilla.org/es/docs/Web/HTTP/Access_control_CORS) Significa **Intercambio de Recursos de Origen Cruzado** permite a los navegadores modernos enviar y recibir datos restringidos, como por ejemplo pueden ser flujo de datos, streams, archivo de un dominio, imágenes, hojas de estilo CSS, Script. En general cualquier tipo de recursos, desde un dominio a otro diferente que ha hecho la petición es decir **es un mecanismo de control de acceso HTTP para acceder a ciertos recursos en un servidor Backend**.
+
+Por lo tanto tenemos un cliente que accede a través de un navegador a recursos que están desplegados y servidos en otro dominio. La idea es que el navegador se encargue de toda esta materia de seguridad que ya es un estándar para compartir estos recursos entre diferentes dominios.
+
+El primer paso, se debe configurar Cors en el servidor API REST es decir en el package. Cors determina si se permite compartir recursos en una solicitud de origen cruzado, en un recurso específico en función de si el dominio específico que realiza la solicitud está permitido. El tipo de solicitud HTTP que se realiza si está permitido el GET el POST el PUT el DELETE etc.
+
+**Entonces para resumir el modo en que trabaja Cors es interactuando entre el navegador web y el servidor para determinar si es seguro o no permitir estas peticiones de origen cruzado.**
+
+<img src="images/cors.png">
+
+Primero se envía un Pre Request indicando si el dominio que intenta acceder a este recurso en el servidor tiene acceso a qué tipos de peticiones(1).
+
+Por ejemplo si tiene acceso a POST a GET a PUT a DELETE y va a devolver al navegador todos los métodos que están soportados para este dominio(2).
+
+Luego se envía el Request final que requiere el recurso y ve si este dominio tiene permiso para poder acceder a este recurso y si es así va a devolver la respuesta con el recurso solicitado por ejemplo con el servicio REST en formato JSON o bien si un archivo, una hoja de estilo o JavaScript, una imagen, un video, cualquier flujo de dato del tipo Stream.
+
+Vamos a implementar Cors en nuestra API REST Controller de una forma bastante simple, vámonos a Eclipse. 
+
+* Lo primero es ir a **ClienteRestController** y debemos anotar la clase con la anotación **@CrossOrigin** y entre parentesis ponemos los origenes que tienen acceso a este recurso, en este caso será nuestro dominio de Angular, pero se puede colocar un arreglo de origenes:
+
+`@CrossOrigin(origins = {"http://localhost:4200"})`
+
+
+
+
+Se indica el dominio o la IP del servidor y puede soportar un arreglo. Acá pueden indicar como restricción que puede soportar una lista de dominios permitidos.
+
+Además también podemos especificar los métodos permitidos en un arreglo. Por defecto vamos a dejar todos así que no lo vamos a incluir nada.
+
+También podríamos incluir la cabecera permitida, restricciones sobre los Headers. 
+
+Ahora si que la aplicación Angula se va a poder conectar sin ningún problema y va poder realizar peticiones, le vamos a poder entregar el listado cliente.
 
 ### Implementando Servicio Angular con HttpClient 09:28

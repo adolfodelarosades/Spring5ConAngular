@@ -526,23 +526,108 @@ public class ClienteServiceImpl implements IClienteService{
 Tuvimos que inyectar **IClienteDao** usando **@Autowired** (Inyección de dependencias). Entonces en el método **findAll()** debe retornar una lista de todos los clientes, eso ya esta implementado en nuestro **clienteDao** gracias a que a su vez hereda de **CrudRepository**, por lo que tiene que retorarse **clienteDao.findAll()** pero como esto retorna un Iterable debemos hacer un cast por lo que finalmente nos queda: 
 `return (List<Cliente>) clienteDao.findAll();`
 
-Luego tenemos que anotar con **@Transactional(readOnly = true)** esta anotación nos permite manejar transacción en el método, y como es una consulta, un  Select sería solamente de lectura.
+Luego tuvimos que anotar con **@Transactional(readOnly = true)** esta anotación nos permite manejar transacción en el método, y como es una consulta, un  Select sería solamente de lectura.
 
-De todas formas los métodos del CrudRepository ya vienen con transaccionalidad ya son transaccionales. Por lo tanto podríamos omitir esta notación.
+De todas formas los métodos del **CrudRepository** ya vienen con transaccionalidad ya son transaccionales. Por lo tanto podríamos omitir esta notación.
 
-Ahora yo prefiero anotarla en el Service ya que describe la transaccionalidad de la clase Repository más que nada para tener el control y hacerlo de una forma más explícita. Pero de todas formas se puede omitir así que daría exactamente igual
+Ahora yo prefiero anotarla en el Service ya que describe la transaccionalidad de la clase **Repository** más que nada para tener el control y hacerlo de una forma más explícita. Pero de todas formas se puede omitir así que daría exactamente igual
 
-Pero todos los métodos nuevos que queramos implementar en el IClienteDao ya sea a través del nombre del método o utilizando la
-anotación @Query ahí si tendríamos que utilizar el Transactions, solamente para los métodos propios.
+Pero todos los métodos nuevos que queramos implementar en el **IClienteDao** ya sea a través del nombre del método o utilizando la
+anotación **@Query** ahí si tendríamos que utilizar el **@Transactions**, solamente para los métodos propios.
 
-También quería destacar que @Autowired una anotación para inyectar el IClienteDao, a pesar de que es una interfaz pero por detrás de escena Spring va a crear una instancia de una implementación concreta utilizando la interfaz y va a quedar guardada en el contenedor de Sprint en el contexto.
+También quería destacar que **@Autowired** una anotación para inyectar el **IClienteDao**, a pesar de que es una interfaz pero por detrás de escena Spring va a crear una instancia de una implementación concreta utilizando la interfaz y va a quedar guardada en el contenedor de Sprint en el contexto.
 
-Por lo tanto la podemos inyectar en cualquier otro componente, ya sea una clase Service, ya sea en un Controlador en cualquier clase de nuestra aplicación.
+Por lo tanto la podemos inyectar en cualquier otro componente, ya sea una clase **Service**, ya sea en un Controlador en cualquier clase de nuestra aplicación.
 
-Para finalizar faltaría anotar con **@Service** una anotación muy importante ya que con esto decoramos y marcamos esta clase como un componente de servicio en Sprint y también se va a guardar en el contenedor de Sprint va a quedar almacenado en el contexto. Y después podemos inyectar este objeto este Beans de Sprint en el controlador y lo podemos utilizar pero para eso tenemos que decorarlo y Service lo que hace es justamente eso, si vemos su definición veremos que es un estereotipo de @Component. Por lo tanto con @Component marca la clase la decora para que sea un componente del Framework un Beans y se registra en el contenedor.
+Para finalizar anotamos con **@Service** la clase, una anotación muy importante ya que con esto decoramos y marcamos esta clase como un componente de servicio en Sprint y también se va a guardar en el contenedor de Sprint va a quedar almacenado en el contexto. Y después podemos inyectar este objeto, este Beans de Sprint en el controlador y lo podemos utilizar pero para eso tenemos que decorarlo y Service lo que hace es justamente eso, si vemos su definición veremos que es un estereotipo de **@Component**. Por lo tanto con **@Component** marca la clase, la decora para que sea un componente del Framework un Beans y se registra en el contenedor.
 
 ### Creando controlador @RestController y EndPoint para listar 04:22
+
+Vamos a crear nuestro API Rest un controlador Rest que es una URL que vamos a utilizar para conectar y enviar datos, peticiones a nuestra aplicación por ejemplo para listar nuestro cliente en nuestra aplicación con angular.
+
+
+* Crear package **controllers**
+* Crear la clase **ClienteRestController**
+```java
+package com.bolsadeideas.springboot.backend.apirest.controllers;
+
+public class ClienteRestController {
+
+}
+```
+
+* Lo primero que tenemos que implementar es decorador a nuestra clase con la anotación **@RestController** a diferencia de un controlador normal web MVC con vistas que se anotaría con **@Controller** en este caso como es un API REST, se anota con **@RestController**.
+
+* El siguiente paso es en mapear nuestro **RestController** con **@RequestMapping** para generar nuestra URL, el endpoint, entonces nos queda `@RequestMapping("/api")` 
+
+* Luego vamos a crear el método **index()** que va a retornar un listado de clientes. Necesitamos ir al modelo a la clase Service y obtener el listado de clientes. Para eso tenemos que inyectar con **Autowired** recordemos que en la sección anterior creamos la clase **ClienteServiceImpl** que está decorada con **@Service**, por lo tanto ya es un componente, si revisábamos la anotación vemos que es un **@Component** un componente, por lo tanto ya está dentro del contexto y registrado en el contenedor simplemente la podemos inyectar:
+
+```java
+@Autowired
+private IClienteService clienteService;
+```
+Recordemos que en Spring cuando se declara un Beans con su tipo genérico ya sea una interfaz o clase abstracta va a buscar el primer candidato, una clase concreta que implemente esta interfaz y la tenemos en **ClienteServiceImpl** en la implementación concreta, pero implementa la interfaz **IClienteService**. Por lo tanto este Beans es un tipo de la interfaz, por lo tanto se puede definir como un tipo genérico de la interfaz y busca una implementación concreta y la inyecta, si tuviera más de una habría que usar un calificador. 
+
+* Ya podemos hacer retornar los datos:
+```java
+public List<Cliente> index(){
+	return clienteService.findAll();
+}
+``` 
+
+* Lo último que faltaría sería mapear la URL para generar nuestro EndPoint del método, podemos usar **@GetMapping** ya que es una petición get poniendo la URL con la que queremos hacer el mapeo:
+
+```java
+@GetMapping("/clientes")
+public List<Cliente> index(){
+	return clienteService.findAll();
+}
+```
+
+El código completo de la clase **ClienteRestController** es:
+
+```java
+package com.bolsadeideas.springboot.backend.apirest.controllers;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.bolsadeideas.springboot.backend.apirest.models.entity.Cliente;
+import com.bolsadeideas.springboot.backend.apirest.models.services.IClienteService;
+
+@RestController
+@RequestMapping("/api")
+public class ClienteRestController {
+	
+	@Autowired
+	private IClienteService clienteService;
+	
+	
+	@GetMapping("/clientes")
+	public List<Cliente> index(){
+		return clienteService.findAll();
+	}
+}
+```
+Este sería nuestro API REST nuestro controlador utilizando RestController mapeamos con `/api` todos los métodos del REST y luego cada método va a tener su propio EndPoint:
+
+Verbos | URI                | Action o Handler
+-------|--------------------|------------
+GET    |/clientes           | index()
+GET    |/clientes/create    | create()
+POST   |/clientes           | storre()
+GET    |/clientes/{id}      | show()
+GET    |/clientes/{id}/edit | edit()
+PUT    |/clientes/{id}      | update()
+DELETE |/clientes/{id}      | destroy()
+
 ### Añadiendo Datos de pueba 02:54
+
+
 ### Usando Postman para probar nuestras APIs 04:09
 ### Uso de Cors para compartir recursos en API REST 04:02
 ### Implementando Servicio Angular con HttpClient 09:28

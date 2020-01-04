@@ -627,6 +627,31 @@ DELETE |/clientes/{id}      | destroy()
 
 ### Añadiendo Datos de pueba 02:54
 
+En esta sección vamos a agregar los datos de pruebas, ya tenemos configura la base datos, nuestra tabla, la clase del modelo y también el API REST, el controlador anotado con RestController pero para probar nos faltan algunos datos de prueba y es lo que vamos a hacer ahora
+
+* En la carpeta **src/main/resources** vamos a crear un archivo nuevo `New / Other / SQL Development / SQL File` y de nombre le vamos a poner **import.sql**. Este nombre es importante se tiene que llamar de esa forma ya que Spring Boot a través de JPA con Hibernate va a buscar si existe este **import.sql** y va a ejecutar las sentencias que contenga.
+
+* Insertar el siguiente contenido en el archivo **import.sql**
+
+```sql
+/* Populate tabla clientes */
+INSERT INTO clientes (nombre, apellido, email, create_at) VALUES('Andrés', 'Guzmán', 'profesor@bolsadeideas.com', '2018-01-01');
+INSERT INTO clientes (nombre, apellido, email, create_at) VALUES('Mr. John', 'Doe', 'john.doe@gmail.com', '2018-01-02');
+INSERT INTO clientes (nombre, apellido, email, create_at) VALUES('Linus', 'Torvalds', 'linus.torvalds@gmail.com', '2018-01-03');
+INSERT INTO clientes (nombre, apellido, email, create_at) VALUES('Rasmus', 'Lerdorf', 'rasmus.lerdorf@gmail.com', '2018-01-04');
+INSERT INTO clientes (nombre, apellido, email, create_at) VALUES('Erich', 'Gamma', 'erich.gamma@gmail.com', '2018-02-01');
+INSERT INTO clientes (nombre, apellido, email, create_at) VALUES('Richard', 'Helm', 'richard.helm@gmail.com', '2018-02-10');
+INSERT INTO clientes (nombre, apellido, email, create_at) VALUES('Ralph', 'Johnson', 'ralph.johnson@gmail.com', '2018-02-18');
+INSERT INTO clientes (nombre, apellido, email, create_at) VALUES('John', 'Vlissides', 'john.vlissides@gmail.com', '2018-02-28');
+INSERT INTO clientes (nombre, apellido, email, create_at) VALUES('Dr. James', 'Gosling', 'james.gosling@gmail.com', '2018-03-03');
+INSERT INTO clientes (nombre, apellido, email, create_at) VALUES('Magma', 'Lee', 'magma.lee@gmail.com', '2018-03-04');
+INSERT INTO clientes (nombre, apellido, email, create_at) VALUES('Tornado', 'Roe', 'tornado.roe@gmail.com', '2018-03-05');
+INSERT INTO clientes (nombre, apellido, email, create_at) VALUES('Jade', 'Doe', 'jane.doe@gmail.com', '2018-03-06');
+```
+
+Inserta datos de nombre, apellido, email, create_at, si revisamos la clase Entity tenemos esos mismos datos son atributos de la clase pero que también están mapeados a las columnas en la tabla, en la tabla de clientes y el id es incremental se va a generar de forma automática un Identity que se incrementa en 1 auto incremental.
+
+Vamos a guardar y vamos a ejecutar. En la consola vemos que se insertaron los clientes. Además también tenemos mapeada nuestro API `/api/clientes`. Así que vamos a probar nuestra aplicación, nos vamos al navegador y ejecutamos `http://localhost:8080/api/clientes` muestra la respuesta en formato JSON. Todo perfecto.
 
 ### Usando Postman para probar nuestras APIs 04:09
 ### Uso de Cors para compartir recursos en API REST 04:02

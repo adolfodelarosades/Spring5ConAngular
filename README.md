@@ -654,5 +654,128 @@ Inserta datos de nombre, apellido, email, create_at, si revisamos la clase Entit
 Vamos a guardar y vamos a ejecutar. En la consola vemos que se insertaron los clientes. Además también tenemos mapeada nuestro API `/api/clientes`. Así que vamos a probar nuestra aplicación, nos vamos al navegador y ejecutamos `http://localhost:8080/api/clientes` muestra la respuesta en formato JSON. Todo perfecto.
 
 ### Usando Postman para probar nuestras APIs 04:09
+
+Qué tal cuando trabajamos con API Rest es una buena idea usar Postman que es una herramienta que nos permite probar nuestras API tiene un montón de características que nos ayuda a comprobar por ejemplo si nuestro servicio es rápido si está funcionando correctamente.
+
+En fin ahí tenemos varias herramientas que son bien interesante para poder probar testear y optimizar nuestras API REST Full.
+
+En página de [Postman](https://www.getpostman.com/) podemos descargar la aplicación. 
+
+Una vez que lo tengan instalado nos vamos a Eclipse y levantamos el proyecto, una vez que haya iniciado entonces ejecutamos Postman.
+
+
+En Postman podemos seleccionar los distintos tipos de petición o los verbos por ejemplo **GET** para consultar un listado o un registro en estructura JSon o incluso XML o cualquier, **POST** para crear un nuevo registro. **PUT** modificar, **DELETE** para eliminar, etc.
+
+Para probar nuestro EndPoitn seleccionamos **GET** e introducimos la URL `http://localhost:8080/api/clientes`
+
+Tenemos **localhost** el puerto 8080, `/api` que sería el **RequestMapping** de primer nivel del controlador y `/clientes` que es el **RequestMapping** de segundo nivel de cada acción, en este caso es un **GetMapping**.
+
+Para ejecutar en Postman presionamos el botón **Send** lo que hace que retorne la respuesta en formato JSON.
+```JS
+[
+    {
+        "id": 1,
+        "nombre": "Andrés",
+        "apellido": "Guzmán",
+        "email": "profesor@bolsadeideas.com",
+        "createAt": "2018-01-01"
+    },
+    {
+        "id": 2,
+        "nombre": "Mr. John",
+        "apellido": "Doe",
+        "email": "john.doe@gmail.com",
+        "createAt": "2018-01-02"
+    },
+    {
+        "id": 3,
+        "nombre": "Linus",
+        "apellido": "Torvalds",
+        "email": "linus.torvalds@gmail.com",
+        "createAt": "2018-01-03"
+    },
+    {
+        "id": 4,
+        "nombre": "Rasmus",
+        "apellido": "Lerdorf",
+        "email": "rasmus.lerdorf@gmail.com",
+        "createAt": "2018-01-04"
+    },
+    {
+        "id": 5,
+        "nombre": "Erich",
+        "apellido": "Gamma",
+        "email": "erich.gamma@gmail.com",
+        "createAt": "2018-02-01"
+    },
+    {
+        "id": 6,
+        "nombre": "Richard",
+        "apellido": "Helm",
+        "email": "richard.helm@gmail.com",
+        "createAt": "2018-02-10"
+    },
+    {
+        "id": 7,
+        "nombre": "Ralph",
+        "apellido": "Johnson",
+        "email": "ralph.johnson@gmail.com",
+        "createAt": "2018-02-18"
+    },
+    {
+        "id": 8,
+        "nombre": "John",
+        "apellido": "Vlissides",
+        "email": "john.vlissides@gmail.com",
+        "createAt": "2018-02-28"
+    },
+    {
+        "id": 9,
+        "nombre": "Dr. James",
+        "apellido": "Gosling",
+        "email": "james.gosling@gmail.com",
+        "createAt": "2018-03-03"
+    },
+    {
+        "id": 10,
+        "nombre": "Magma",
+        "apellido": "Lee",
+        "email": "magma.lee@gmail.com",
+        "createAt": "2018-03-04"
+    },
+    {
+        "id": 11,
+        "nombre": "Tornado",
+        "apellido": "Roe",
+        "email": "tornado.roe@gmail.com",
+        "createAt": "2018-03-05"
+    },
+    {
+        "id": 12,
+        "nombre": "Jade",
+        "apellido": "Doe",
+        "email": "jane.doe@gmail.com",
+        "createAt": "2018-03-06"
+    }
+]
+```
+Aparte del JSON nos regresa:
+`Status: 200OK     Time: 26ms     Size: 1.38 KB`
+El Status indica que se realizó correctamente sin ningún problema. También tenemos el tiempo que se demoró el Request y el tamaño de la respuesta. 
+
+#### Pestaña Headers
+
+Además si nos vamos a Headers tenemos el **Content type**  **aplication/json** 
+
+#### Diferentes Vistas
+
+* **Pretty**: Presenta el JSON formateado.
+* **Raw**: Presenta el JSON sin formato.
+* **Preview**: Muestra un registro por renglón
+
+Para eso lo primero que vamos a tener que hacer es añadir el Cors significa o se le conoce como Cross Origin Resort Charing que permite en el fondo compartir dos aplicaciones compartir o integrar dos aplicaciones que están en diferentes dominios será lo que veremos en la próxima sección.
+
 ### Uso de Cors para compartir recursos en API REST 04:02
+
+
 ### Implementando Servicio Angular con HttpClient 09:28

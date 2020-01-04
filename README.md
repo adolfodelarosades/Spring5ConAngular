@@ -366,10 +366,11 @@ Simplemente se implementa una interfaz, heredamos de la interfaz CRUD repositor 
 
 Y además si queremos podemos implementar nuestros propios métodos customizados usando la notación @Query o también utilizando el nombre el método cosa que vamos a ver un poco en esta clase.
 
-#### Crear la clase Repository o DAO
+#### Crear la Clase Repository o DAO
 
 Pero vamos a implementar primero la interfaz DAO:
 
+* Crear el package **models.dao** dentro del package principal.
 * Clic derecho en el package models.dao y damos `New / Interface`
 * Name: **IClienteDao**
 
@@ -448,7 +449,7 @@ En `List<Person> findPeopleDistinctByLastnameOrFirstname(String lastname, String
 
 Otra alternativa aparte de realizar consulta a través del nombre del método es utilizar una [anotación @Query](5.3.4. Using @Query). Podemos tener un método con algún nombre que le queremos dar y lo anotamos con `@Query` y entre los parentesis colocamos la consulta de JPA o Hibernate. Recordemos que estas consultas son **HQL** es decir de **Hibernate Query Language** orientada a objetos, no a tablas.  También pueden recibir parámetros, veamos el ejemplo:
 
-```
+```java
 public interface UserRepository extends JpaRepository<User, Long> {
 
   @Query("select u from User u where u.emailAddress = ?1")
@@ -456,112 +457,89 @@ public interface UserRepository extends JpaRepository<User, Long> {
 }
 ```
 
-#### Crear la clase Service
+#### Crear la Interfaz Service
 
-El siguiente paso es crear la clase servis entonces vamos a crear un nuevo package Models punto servicios.
+El siguiente paso es crear la clase Service:
 
-Vamos a finalizar y en servicios vamos a crear una interfaz y cliente Service y esta interfaz le vamos
+* Vamos a crear un nuevo package **models.services*
+* Dentro del nuevo package creamos una Interface **IClienteService**
+```java
+package com.bolsadeideas.springboot.backend.apirest.models.services;
 
-a dar un contrato de implementación.
+public interface IClienteService {
 
-Los métodos del club por ejemplo para alistar para buscar por ahí guardar editar y eliminar Vamos primero
+}
+```
+* A esta interfaz le daremos un contrato de implementación, los métodos del CRUD. Empezamos con el **findAll**:
+```java
+package com.bolsadeideas.springboot.backend.apirest.models.services;
 
-con el fin al
+import java.util.List;
+import com.bolsadeideas.springboot.backend.apirest.models.entity.Cliente;
 
-cliente.
+public interface IClienteService {
 
-Hoy importamos Liseth de Java útil importamos cliente y por ahora vamos a dejar solamente implementado
+	public List<Cliente> findAll();
+}
+```
+#### Crear la Clase Service
 
-el final y después vamos a ir implementando lo demás métodos del servis para realizar.
+Vamos a crear la clase **ClienteServiceImpl** para implementar el método findAll() definido anteriormente en la interfaz:
+```java
+package com.bolsadeideas.springboot.backend.apirest.models.services;
 
-Entonces ahora vamos a crear la clase servis y vamos a implementar este método.
+public class ClienteServiceImpl {
 
-Vamos a crear entonces la clase servis
+}
+```
+Lo primero que hacemos es implementar **IClienteService** con lo que automáticamente nos pedirá implementar el método findAll(), nuestra clase queda así:
+```java
+package com.bolsadeideas.springboot.backend.apirest.models.services;
 
-cliente servis implement de implementación.
+import java.util.List;
 
-Le ponemos imploro finaliza entonces implement
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-y cliente servis hakama un error que nos pide implementar el método final.
+import com.bolsadeideas.springboot.backend.apirest.models.dao.IClienteDao;
+import com.bolsadeideas.springboot.backend.apirest.models.entity.Cliente;
 
-Entonces acá tenemos que inyectar usando atu Wired inyección de dependencia en sprint la vamos a importar.
+//Anotar como Service para marcarla como una clase de Servicio
+@Service
+public class ClienteServiceImpl implements IClienteService{
 
-Vamos a inyectar el cliente dado entonces es un Privat
+	//Inyectar (Inyección de dependdencias) el ClienteDao
+	@Autowired
+	private IClienteDao clienteDao;
+	
+	@Override
+	@Transactional(readOnly = true) //Permite manejar transacción en el método y como es un Select será sólo de lectura
+	public List<Cliente> findAll() {
+		//Como findAll() retorna un Iterable le hacemos un CAST
+		return (List<Cliente>) clienteDao.findAll();
+	}
 
-importamos el cliente Davo y le llevamos al atributo cliente el agua.
+}
+```
 
-Entonces en el método final acabamos a ocupar a utilizar este atributo para acceder a los clientes a
+Tuvimos que inyectar **IClienteDao** usando **@Autowired** (Inyección de dependencias). Entonces en el método **findAll()** debe retornar una lista de todos los clientes, eso ya esta implementado en nuestro **clienteDao** gracias a que a su vez hereda de **CrudRepository**, por lo que tiene que retorarse **clienteDao.findAll()** pero como esto retorna un Iterable debemos hacer un cast por lo que finalmente nos queda: 
+`return (List<Cliente>) clienteDao.findAll();`
 
-la lista de clientes.
+Luego tenemos que anotar con **@Transactional(readOnly = true)** esta anotación nos permite manejar transacción en el método, y como es una consulta, un  Select sería solamente de lectura.
 
-Entonces cliente dado fin Holl.
+De todas formas los métodos del CrudRepository ya vienen con transaccionalidad ya son transaccionales. Por lo tanto podríamos omitir esta notación.
 
-Este método retorna un terabyte por lo tanto acá tenemos que convertir a un listo.
+Ahora yo prefiero anotarla en el Service ya que describe la transaccionalidad de la clase Repository más que nada para tener el control y hacerlo de una forma más explícita. Pero de todas formas se puede omitir así que daría exactamente igual
 
-Hacemos un cast de List de cliente y ya está terminado implementado el método.
+Pero todos los métodos nuevos que queramos implementar en el IClienteDao ya sea a través del nombre del método o utilizando la
+anotación @Query ahí si tendríamos que utilizar el Transactions, solamente para los métodos propios.
 
-Luego tenemos que anotar con transaccional
+También quería destacar que @Autowired una anotación para inyectar el IClienteDao, a pesar de que es una interfaz pero por detrás de escena Spring va a crear una instancia de una implementación concreta utilizando la interfaz y va a quedar guardada en el contenedor de Sprint en el contexto.
 
-esta notación nos permite manejar transacción en el método transaccional de transacción anotación y
+Por lo tanto la podemos inyectar en cualquier otro componente, ya sea una clase Service, ya sea en un Controlador en cualquier clase de nuestra aplicación.
 
-como es una consulta su Select sería solamente de lectura.
-
-Acá colocamos Read Only igual bien ahora de todas formas los métodos del crudo repositorios ya vienen
-
-con transaccionalidad ya son transaccionales.
-
-Por lo tanto podríamos omitir esta notación.
-
-Ahora yo prefiero anotarla en el servis ya que describe la transaccionalidad de la clase repositor y
-
-más que nada para tener el control y hacerlo de una forma más explícita.
-
-Pero de todas formas se puede omitir así que daría exactamente igual ahora lo que si todos los métodos
-
-nuevos que queramos implementar en el cliente dado ya sea a través del nombre Método o utilizando la
-
-notación QWERTY ahí tendríamos que utilizar el Transactions solamente para los métodos propios pero
-
-los que ya vienen dentro como el SAI como el fin por ahí fenol etcétera.
-
-Estos métodos ya vienen con transaccion.
-
-También quería destacar el autor Wired una notación para inyectar el quién te daba el cliente dado.
-
-A pesar de que es una interfaz pero por detrás de escena exprima crear una instancia de una implementación
-
-concreta utilizando la interfaz iba a quedar guardada en el contenedor de sprint en el contexto.
-
-Por lo tanto la podemos inyectar en el otro componente ya sea una clase servis ya sea en un controlador
-
-en cualquier clase de nuestra aplicación.
-
-Qué más queda para finalizar faltaría anotar con servis
-
-una actuación muy importante ya que con esto decoramos y marcamos esta clase como un componente de servicio
-
-en sprint y también se va a guardar en el contenedor de sprint que va a quedar almacenado en el contexto.
-
-Y después podemos inyectar este objeto.
-
-Este Vins de sprint en el controlador y lo podemos utilizar pero para eso tenemos que decorarlo y servis
-
-lo que hace es justamente es un tipo un estereotipo de component.
-
-Por lo tanto con componentes marca la clase la decora para que sea un componente del frente un Vins
-
-y se registra en el contenedor vamos a guardar y ya tenemos implementar nuestra clase serves bien y
-
-estamos listo con nuestra lógica negocio con toda la clase del modelo y la próxima clase continuamos
-
-con el controlador resto quedamos hasta acá y cualquier duda que tengan las revisamos hasta la próxima.
-
-Spring cuenta con un componente bastante robusto llamado **Spring Data JPA** 
-Pasos para crear el Repository o DAO:
-
-* Crear el package **models.dao** dentro del package principal.
-
-
+Para finalizar faltaría anotar con **@Service** una anotación muy importante ya que con esto decoramos y marcamos esta clase como un componente de servicio en Sprint y también se va a guardar en el contenedor de Sprint va a quedar almacenado en el contexto. Y después podemos inyectar este objeto este Beans de Sprint en el controlador y lo podemos utilizar pero para eso tenemos que decorarlo y Service lo que hace es justamente eso, si vemos su definición veremos que es un estereotipo de @Component. Por lo tanto con @Component marca la clase la decora para que sea un componente del Framework un Beans y se registra en el contenedor.
 
 ### Creando controlador @RestController y EndPoint para listar 04:22
 ### Añadiendo Datos de pueba 02:54

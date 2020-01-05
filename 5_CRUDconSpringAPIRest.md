@@ -119,44 +119,63 @@ public class ClienteServiceImpl implements IClienteService{
 }
 ```
 
-Bueno lo primero es agregar el transaccional vamos a agregar.
-
-En fin por aquí solamente de lectura en el Sai vamos a tener el transaction al completo y lo mismo para el delito.
-
-Y acá es bastante simple porque el fin por allí vamos a invocar al cliente dado al repositorio y le vamos a invocar el método Bucca por ende éste va a retornar un optional ya que estamos trabajando con principesco y la gracia del optional que nos permite manejar el contenido el contenido de consulta por ejemplo si está presente el resultado de la búsqueda por allí.
-
-Por ejemplo acá tenemos varios métodos acá tenemos el jet que si lo encuentra va a retornar el objeto pero si no lo encuentra va a retornar una excepción nos Satch Element sp3 es decir que no encuentra el elemento exceptúan acá tenemos una opción si no lo encuentra.
-
-Entonces retornamos un nulo por ejemplo si tenemos o bien sino lanzar una sección personalizada acá podemos preguntar si está presente.
-
-En fin acá podemos filtrar.
-
-Acá tenemos el mapa que nos permite modificar el resultado.
-
-Tenemos varias opciones.
-
-Por ejemplo vamos a utilizar el or else y acá simplemente Nul.
-
-Entonces si lo encuentra retorna el objeto cliente.
-
-De lo contrario va a retornar un 9.
-
-Luego tenemos el SAIC que sería cliente dado .6 y el SOIB va a retornar la entidad guardada en la Shehata que contiene el Heydi le pasamos el cliente.
-
-Finalmente tenemos el delito el delito es un cliente dado punto Delight por Heydi.
-
-Acá tenemos dos el delito que recibe una entidad que está tachada en el contexto de persistence por lo tanto está dentro de la sección de JPA del contexto.
-
-Acá tenemos el delito por ahí simplemente le pasamos una Heydi internamente va a obtener la entidad el cliente y lo va a eliminar de forma automática.
-
-Eso de todo ya tenemos implementado nuestro Cruz nuestra clase servis y continuamos con el controlador en la próxima clase.
-
-Quedamos hasta acá y cualquier duda la revisamos en el foro hasta la próxima.
-
-
-
-
 ### Escribiendo los métodos show y create en el Controlador Backend API Rest 05:26
+
+Vamos a comenzar implementando el API REST, nuestro controlador con algunos métodos para mostrar por id y el método para crear.
+
+* Vamos a **ClienteRestController**
+* Implementemos el mostrar por id, es decir **findById**:
+```java
+@GetMapping("/clientes/{id}")
+public Cliente show(@PathVariable Long id) {
+	return clienteService.findById(id);
+}
+```
+
+`@PathVariable` Anotación que indica que un parámetro de método debe estar vinculado a una variable de plantilla URI. 
+
+
+* Vamos a implementar el crear el cual será de tipo POST.
+```java
+@PostMapping("/clientes")
+public Cliente create(@RequestBody Cliente cliente) {
+	return clienteService.save(cliente);
+}
+```
+Pero cuando se este insertando el cliente debemos asignar la fecha de creación. Una forma de hacerlo sería hacerlo antes de realizar el **save**
+
+```java
+@PostMapping("/clientes")
+public Cliente create(@RequestBody Cliente cliente) {
+	cliente.setCreateAt(new Date());
+	return clienteService.save(cliente);
+}
+```
+Pero queda más elegante si nos vamos a la clase **Cliente Entity** y definimos el métodoo **prePersisten** que es un evento del ciclo de vida de las clases Entity, para asignar la fecha a la propiedad **createAt**:
+```java
+@PrePersist
+public void prePersist() {
+	createAt = new Date();
+}
+```
+Nos quedaremos con esta segunda opción.
+Por último queremos retornar un Status cuando se inserte nuestro Cliente para lo cual usamos la anotación `@ResponseStatus` y debemos indicar que Status queremos regresar por defaul siempre regresa OK status 200, pero en este caso queremos retornar un 201 por lo que la notación completa sería `@ResponseStatus(`  en el crédito vamos a anotar con Ripollet status responde estátus.
+
+Http: estátus como código punto create acá vamos a cambiar el código a 201 que sea creado contenido en nuestra aplicación y por defecto cuando no se asigna el estatus.
+
+Si todo sale bien el HTTP estátus va a quedar como Okkhoy con el código 200 por lo tanto si acá colocamos en el chow o en el listo índex que retorna el listado colocamos el responsable estátus y colocamos el OK.
+
+Ese sería el código 200 por defecto.
+
+Por lo tanto sería redundante colocar esta anotación ya que lo asigna por defecto si se realiza correctamente y entrega la respuesta.
+
+Pero en este caso queremos retornar un 201 un Kraid para indicar que se ha creado contenido.
+
+No vamos a dejar sin la anotación.
+
+Bien eso sería todo y continuamos en la próxima clase para implementar el arte y el delito en nuestra
+
+API res controles y cualquier duda que tengan la revisamos hasta la próxima.
 
 ### Escribiendo los métodos update y delete en el Controlador Backend API Rest 05:37
 

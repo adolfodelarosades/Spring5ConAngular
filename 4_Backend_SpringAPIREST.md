@@ -158,6 +158,16 @@ spring.jpa.database-platform=org.hibernate.dialect.MySQL57Dialect
 spring.jpa.hibernate.ddl-auto=create-drop
 logging.level.org.hibernate.SQL=debug
  ```
+ 
+ Es muy importante tener el Driver de MySQL en el pom.xml:
+ 
+ ```
+ <dependency>
+	<groupId>mysql</groupId>
+	<artifactId>mysql-connector-java</artifactId>
+	<scope>runtime</scope>
+</dependency> 
+```
 
 ### Instalando MySQL 04:12
 

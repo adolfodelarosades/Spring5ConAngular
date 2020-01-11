@@ -817,6 +817,3 @@ Además también podemos especificar los métodos permitidos en un arreglo. Por 
 También podríamos incluir la cabecera permitida, restricciones sobre los Headers. 
 
 Ahora si que la aplicación Angula se va a poder conectar sin ningún problema y va poder realizar peticiones, le vamos a poder entregar el listado cliente.
-
-### Implementando Servicio Angular con HttpClient 09:28
-

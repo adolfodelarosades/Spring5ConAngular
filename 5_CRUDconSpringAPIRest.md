@@ -134,7 +134,6 @@ public Cliente show(@PathVariable Long id) {
 
 `@PathVariable` Anotación que indica que un parámetro de método debe estar vinculado a una variable de plantilla URI. 
 
-
 * Vamos a implementar el crear el cual será de tipo POST.
 ```java
 @PostMapping("/clientes")
@@ -159,27 +158,95 @@ public void prePersist() {
 }
 ```
 Nos quedaremos con esta segunda opción.
-Por último queremos retornar un Status cuando se inserte nuestro Cliente para lo cual usamos la anotación `@ResponseStatus` y debemos indicar que Status queremos regresar por defaul siempre regresa OK status 200, pero en este caso queremos retornar un 201 por lo que la notación completa sería `@ResponseStatus(`  en el crédito vamos a anotar con Ripollet status responde estátus.
 
-Http: estátus como código punto create acá vamos a cambiar el código a 201 que sea creado contenido en nuestra aplicación y por defecto cuando no se asigna el estatus.
+Si todo sale bien el HTTP estátus va a quedar como Ok, con el código 200, pero en este caso queremos retornar un Status 201 que representa un CREATE, por lo que usaremos la anotación `@ResponseStatus(HttpStatus.CREATED)`. Por lo que el método `create` completo queda así:
+```java
+@PostMapping("/clientes")
+@ResponseStatus(HttpStatus.CREATED)
+public Cliente create(@RequestBody Cliente cliente) {
+	return clienteService.save(cliente);
+}
+```
 
-Si todo sale bien el HTTP estátus va a quedar como Okkhoy con el código 200 por lo tanto si acá colocamos en el chow o en el listo índex que retorna el listado colocamos el responsable estátus y colocamos el OK.
-
-Ese sería el código 200 por defecto.
-
-Por lo tanto sería redundante colocar esta anotación ya que lo asigna por defecto si se realiza correctamente y entrega la respuesta.
-
-Pero en este caso queremos retornar un 201 un Kraid para indicar que se ha creado contenido.
-
-No vamos a dejar sin la anotación.
-
-Bien eso sería todo y continuamos en la próxima clase para implementar el arte y el delito en nuestra
-
-API res controles y cualquier duda que tengan la revisamos hasta la próxima.
+Lo que es redundante es colocar la anotación `@ResponseStatus(HttpStatus.OK)` por que es la que regresa por default.
 
 ### Escribiendo los métodos update y delete en el Controlador Backend API Rest 05:37
 
+Ahora vamos a implementar el actualizar y el eliminar.
+
+* Para actualizar utilizaremos la anotación `@PutMapping` Nuestro método `update` queda así:
+
+```java
+@PutMapping("/clientes/{id}")
+@ResponseStatus(HttpStatus.CREATED)
+public Cliente update(@RequestBody Cliente cliente, @PathVariable Long id) {
+
+	// Recupero el Cliente de la BD por su ID
+	Cliente clienteActual = clienteService.findById(id);
+
+	// Actualizo el clienteActual con los datos del Cliente que me pasan de parámetro
+	clienteActual.setApellido(cliente.getApellido());
+	clienteActual.setNombre(cliente.getNombre());
+	clienteActual.setEmail(cliente.getEmail());
+
+	// Salvo el clienteActual que ya esta modificado y retorno el Cliente actualizado.
+	return clienteService.save(clienteActual);
+}
+```
+Este método recibe dos parámetros un `cliente` y un `id` el cual no permite recuperar de la BD el cliente con ese id que vamos a modificar con los datos del cliente que se nos pasa como parámetro. Una vez que se actualiza el clienteActual, se salva en la BD y se retorna el cliente actualizado.
+
+Para actualizar los datos estamos usando el método `save` igual que cuando lo insertamos, este método `save` sirve tanto para hacer un insert como para un update. Si el id es Null o cero estamos hablando de un nuevo objeto que se inserta pero cuando existe el id lo que se hace es un update, por lo tanto lo va a actualizar en vez de insertar.
+
+* Para eliminar usaremos la anotación `@DeleteMapping`, nuestro método queda así:
+```java
+@DeleteMapping("/clientes/{id}")
+@ResponseStatus(HttpStatus.NO_CONTENT)
+public void delete(@PathVariable Long id) {
+	clienteService.delete(id);
+}
+```
+Se recibe el parámetro `id` y con ese eliminamos el registro usando el método `delete` del `Service`, en este caso no se retorna nada. Con la anotación `@ResponseStatus(HttpStatus.NO_CONTENT)` retornamos un `204 No Content.`
+
+Ya tenemos completamente terminado nuestra API REST con nuestro Controlador terminado.
+
 ### Probando nuestro Backend API Rest con Postman 06:41
+
+El siguiente paso es probar nuestra API REST con Postman, en nuestro controlador tenemos los distintos métodos:
+
+* Listar todos los clientes que es una petición del tipo **get @GetMapping("/clientes")**
+* Obtener un Cliente por id que también es una petición del tipo **get @GetMapping("/clientes/{id}")**
+* Crear un nuevo cliente que es una petición del tipo **post @PostMapping("/clientes")** 
+* Modificar un cliente que es una petición de tipo **put @PutMapping("/clientes/{id}")** 
+* Eliminar un cliente que es una petición de tipo **delete @DeleteMapping("/clientes/{id}")**
+
+Nos vamos a **Postman** para probar:
+
+* `GET http://localhost:8080/api/clientes`		**Status: 200 OK**
+* `GET http://localhost:8080/api/clientes/5`		**Status: 200 OK**
+* `POST http://localhost:8080/api/clientes`		**Status: 201 CREATED**
+En `Body > Raw > JSON `  (Es el Cliente a insetar, lo que recibe de parámetro)
+```js
+{
+    "nombre": "Adolfo",
+    "apellido": "De la Rosa",
+    "email": "adolfodelarosa@gmail.com"
+        
+}
+```
+* `PUT http://localhost:8080/api/clientes/14`		**Status: 201 CREATED**
+En `Body > Raw > JSON `  (Es el Cliente a insetar, lo que recibe de parámetro)
+```js
+{
+    "nombre": "Edgar",
+    "apellido": "De la Rosa",
+    "email": "edgardelarosa@gmail.com"
+        
+}
+```
+Retorna:
+`{"id":14,"nombre":"Edgar","apellido":"De la Rosa","email":"edgardelarosa@gmail.com","createAt":"2020-01-13"}`
+* `DELETE http://localhost:8080/api/clientes/14`		**Status: 204 No Content**
+
 
 ### Creando el componente form.component y la vista del formulario 10:46
 

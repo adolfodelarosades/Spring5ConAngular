@@ -320,20 +320,40 @@ Retorna:
 
 ### Creando el componente form.component y la vista del formulario 10:46
 
+:+1: Angular
+
 ### Configurando la ruta y navegación del formulario 04:55
+
+:+1: Angular
 
 ### Escribiendo implementación crear en el cliente.service.ts y en form.component.ts 06:00
 
+:+1: Angular
+
 ### Actualización: nueva versión de SweetAlert2 8.0.1 o superior 00:39
+
+:+1: Angular
 
 ### Instalar SweetAlert2 para enviar mensajes de alerta en el cliente 05:06
 
+:+1: Angular
+
 ### Cargando los datos en el formulario para actualizar 06:28
+
+:+1: Angular
 
 ### Escribiendo el update en el cliente.service.ts y en form.component.ts 07:02
 
+:+1: Angular
+
 ### Escribiendo el delete en la clase service y en el componente clientes 07:37
+
+:+1: Angular
 
 ### Overflow en listado de clientes, ajustando layout 03:16
 
+:+1: Angular
+
 ### Validando los clientes en la tabla HTML con directiva ngIf 02:41
+
+:+1: Angular
